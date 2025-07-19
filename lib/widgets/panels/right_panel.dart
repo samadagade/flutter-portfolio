@@ -14,10 +14,8 @@ Widget rightPanel(BuildContext context, TabController tabController) {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const SizedBox(height: 30),
         TabBar(
           controller: tabController,
-          // labelColor: Colors.black,
           unselectedLabelColor: Colors.grey,
           indicatorColor: Colors.blue,
           indicatorSize: TabBarIndicatorSize.tab,

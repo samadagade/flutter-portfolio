@@ -37,7 +37,7 @@ class ButtonRow extends StatelessWidget {
             height: 40,
             width: 40,
             color: getColor(context,
-                lightColor: Colors.white, darkColor: Color(0xFF32CD32)), // GFG
+                lightColor: Colors.white, darkColor: Color(0xFF32CD32)),
           ),
           onTap: () {
             launchLink(gfgProfileUrl, context);

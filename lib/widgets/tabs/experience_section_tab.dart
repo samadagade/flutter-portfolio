@@ -51,16 +51,13 @@ Widget buildExperienceSection() {
                   "${exp["company"]!} • ${exp["duration"]!}",
                   style: const TextStyle(
                     fontSize: 14,
-                    // color: Colors.black54,
                   ),
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  // maxLines: 6,
                   exp["description"]!,
                   style: const TextStyle(
                     fontSize: 15,
-                    // color: Colors.black87,
                   ),
                 ),
               ],

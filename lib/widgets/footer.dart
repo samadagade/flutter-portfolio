@@ -7,7 +7,6 @@ Widget PortfolioFooter(BuildContext context) {
   final year = DateTime.now().year;
 
   return Container(
-    //color: getColor(context, lightColor: Colors.white, darkColor: Color(0xFF101820)),
     padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -43,7 +42,7 @@ Widget PortfolioFooter(BuildContext context) {
               ),
             ),
             Container(
-              height: 20, // adjust as needed
+              height: 20,
               width: 1,
               color: Colors.grey.shade400,
               margin: EdgeInsets.only(left: 8),

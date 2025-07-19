@@ -9,17 +9,17 @@ void showContactDialog(BuildContext context) {
   showDialog(
     context: context,
     // ignore: deprecated_member_use
-    barrierColor: Colors.black.withOpacity(0.5), // Darken background
+    barrierColor: Colors.black.withOpacity(0.5),
     builder: (BuildContext context) {
       return BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5), // Blur effect
+        filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
         child: AlertDialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
           backgroundColor: getColor(context,
               lightColor: Colors.white,
-              darkColor: Colors.black), // Slight transparency
+              darkColor: Colors.black),
           title: Center(
               child: Text(
             "Contact Me",

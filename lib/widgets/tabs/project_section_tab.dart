@@ -83,13 +83,12 @@ Widget buildProjectsSection() {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        /// 🏷 Title Row
+                        // Title Row
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             CircleAvatar(
                               radius: 18,
-                              // backgroundColor: Color(0xFFe3f2fd),
                               backgroundColor: Theme.of(context).brightness ==
                                       Brightness.dark
                                   ? Colors.grey[900]
@@ -234,35 +233,6 @@ Widget buildProjectsSection() {
                                             fit: BoxFit.cover),
                                   ),
                                 ),
-
-                              /// Hero Image
-                              // if (project["image"] != null)
-                              //   Hero(
-                              //     tag: 'projectImage_${project["id"]}',
-                              //     child: ClipRRect(
-                              //       borderRadius: BorderRadius.circular(14),
-                              //       child: isOnline
-                              //           ? Image.network(
-                              //               project["image"]!,
-                              //               height: 190,
-                              //               width: double.infinity,
-                              //               fit: BoxFit.cover,
-                              //               loadingBuilder: (context, child,
-                              //                   loadingProgress) {
-                              //                 if (loadingProgress == null) {
-                              //                   return child;
-                              //                 }
-                              //                 return Container(
-                              //                   height: 190,
-                              //                   alignment: Alignment.center,
-                              //                   child:
-                              //                       const CircularProgressIndicator(),
-                              //                 );
-                              //               },
-                              //             )
-                              //           : SizedBox.shrink(),
-                              //     ),
-                              //   ),
                               const SizedBox(height: 10),
                               Text(
                                 "Updated: ${project["date"] ?? "Recently"}",

@@ -44,7 +44,7 @@ class _SplashScreenState extends State<SplashScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 AnimatedTextKit(
-                  key: ValueKey(Theme.of(context).brightness), //
+                  key: ValueKey(Theme.of(context).brightness),
                   animatedTexts: [
                     TyperAnimatedText(
                       "Portfolio",
