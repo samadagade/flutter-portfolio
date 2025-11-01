@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:portfolio/core/widgets/enhanced_snackbar.dart';
 import 'package:portfolio/util/connection_checker.dart';
-import 'package:portfolio/widgets/basic_widgets/enhanced_snackbar.dart';
 
 noInternetSnackbar(BuildContext context) {
   return showCustomSnackBar(

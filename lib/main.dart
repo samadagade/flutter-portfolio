@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:portfolio/util/app_theme.dart';
-import 'package:portfolio/widgets/splash_screen.dart';
+import 'package:portfolio/core/util/app_details.dart';
+import 'package:portfolio/core/util/app_theme.dart';
+import 'package:portfolio/features/splash/presentation/splash_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await AppInfo.init();
   runApp(const MainApp());
 }
 
@@ -61,6 +64,7 @@ class _MainAppState extends State<MainApp> {
         theme: lightTheme(),
         darkTheme: darkTheme(),
         debugShowCheckedModeBanner: false,
-        home: SplashScreen(toggleTheme: toggleTheme));
+        home: SplashScreen(toggleTheme: toggleTheme),
+      );
   }
 }
