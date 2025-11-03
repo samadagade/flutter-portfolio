@@ -15,11 +15,6 @@ void copyToClipboard({
   Clipboard.setData(ClipboardData(text: clipbarodData));
 }
 
-String getPhoneUrl() {
-  final String url = 'tel:$phoneNumber';
-  return url;
-}
-
 /// Builds a nicely formatted block of text from either:
 /// - [raw] a full custom string, or
 /// - [lines] a list of lines, or
@@ -91,8 +86,7 @@ Future<void> showShareCopyDialog(
 
   showDialog(
     context: context,
-    barrierColor:
-        Colors.black.withOpacity(0.5),
+    barrierColor: Colors.black.withOpacity(0.5),
     builder: (BuildContext context) {
       return BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
@@ -248,6 +242,5 @@ Future<void>? showShareCopyDialogByType(
       );
   }
 }
-
 
 enum PopupOption { contactme, linkedin, github, androidapk, resume }

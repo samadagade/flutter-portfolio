@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:portfolio/app_config.dart';
 import 'package:portfolio/core/util/coming_soon_snackbar.dart';
+import 'package:portfolio/core/util/utility.dart';
 import 'package:portfolio/core/widgets/contact_dialog.dart';
 import 'package:portfolio/core/widgets/share_copy.dart';
 import 'package:portfolio/features/portfolio/domain/entities/project.dart';
@@ -33,7 +34,7 @@ class ChatService {
 
   void sendMessage(String text) {
     if (text.trim().isEmpty) return;
-    
+
     final message = Message(text: text, isMe: true, timestamp: DateTime.now());
 
     _messageController.add(message);
@@ -45,8 +46,6 @@ class ChatService {
     _typingController.close();
   }
 }
-
-
 
 class SimpleChat extends StatefulWidget {
   const SimpleChat({super.key});
@@ -69,8 +68,8 @@ class _SimpleChatState extends State<SimpleChat> with TickerProviderStateMixin {
     super.initState();
 
     _scroll.addListener(() {
-      final atBottom = _scroll.position.pixels >=
-          _scroll.position.maxScrollExtent - 60;
+      final atBottom =
+          _scroll.position.pixels >= _scroll.position.maxScrollExtent - 60;
       setState(() => _showJump = !atBottom);
     });
 
@@ -117,10 +116,11 @@ class _SimpleChatState extends State<SimpleChat> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final isDark = isDarkMode(context);
 
     return Scaffold(
-      backgroundColor: isDark ? const Color(0xFF0E1117) : const Color(0xFFF6F7FB),
+      backgroundColor:
+          isDark ? const Color(0xFF0E1117) : const Color(0xFFF6F7FB),
       appBar: _AIBotBar(isDark: isDark),
       body: Column(
         children: [
@@ -162,7 +162,7 @@ class _SimpleChatState extends State<SimpleChat> with TickerProviderStateMixin {
           ),
 
           Visibility(
-            visible: !_showJump,
+            visible: _showJump,
             child: AnimatedSlide(
               duration: const Duration(milliseconds: 180),
               offset: _showJump ? Offset.zero : const Offset(0, 1.5),
@@ -171,7 +171,9 @@ class _SimpleChatState extends State<SimpleChat> with TickerProviderStateMixin {
                 opacity: _showJump ? 1 : 0,
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 2),
-                  child: IconButton(onPressed: _scrollToBottom, icon: const Icon(Icons.arrow_downward_rounded)),
+                  child: IconButton(
+                      onPressed: _scrollToBottom,
+                      icon: const Icon(Icons.arrow_downward_rounded)),
                 ),
               ),
             ),
@@ -182,10 +184,13 @@ class _SimpleChatState extends State<SimpleChat> with TickerProviderStateMixin {
             controller: _controller,
             onSend: _sendMessage,
           ),
-          
+
           Padding(
             padding: const EdgeInsets.only(top: 2.0, bottom: 8.0),
-            child: Text("Chatbot can make mistakes. Please verify critical information.", style: TextStyle(fontSize: 12, color: Colors.grey),),
+            child: Text(
+              "Chatbot can make mistakes. Please verify critical information.",
+              style: TextStyle(fontSize: 12, color: Colors.grey),
+            ),
           ),
         ],
       ),
@@ -215,8 +220,9 @@ class _AIBotBar extends StatelessWidget implements PreferredSizeWidget {
             children: [
               CircleAvatar(
                 radius: 18,
-                backgroundColor:
-                    isDark ? Colors.blueGrey.shade800 : Colors.blueGrey.shade100,
+                backgroundColor: isDark
+                    ? Colors.blueGrey.shade800
+                    : Colors.blueGrey.shade100,
                 child: const Icon(Icons.smart_toy_outlined, size: 20),
               ),
               Positioned(
@@ -242,7 +248,8 @@ class _AIBotBar extends StatelessWidget implements PreferredSizeWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Samarth’s Assistant', style: TextStyle(fontWeight: FontWeight.w600)),
+                Text('Samarth’s Assistant',
+                    style: TextStyle(fontWeight: FontWeight.w600)),
                 SizedBox(height: 2),
                 Text('Online • fast, helpful, friendly',
                     style: TextStyle(fontSize: 12, color: Colors.grey)),
@@ -297,7 +304,9 @@ class _InfoStrip extends StatelessWidget {
   Widget _pill({required IconData icon, required String text}) => Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         decoration: BoxDecoration(
-          color: isDark ? Colors.white.withOpacity(0.06) : Colors.black.withOpacity(0.04),
+          color: isDark
+              ? Colors.white.withOpacity(0.06)
+              : Colors.black.withOpacity(0.04),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: isDark ? Colors.white12 : Colors.black12),
         ),
@@ -362,14 +371,16 @@ class _MessageBubble extends StatelessWidget {
         ? Theme.of(context).colorScheme.primary
         : (isDark ? const Color(0xFF1A1F24) : Colors.white);
 
-    final textColor = me ? Colors.white : (isDark ? Colors.white : Colors.black87);
+    final textColor =
+        me ? Colors.white : (isDark ? Colors.white : Colors.black87);
 
-    final border = me ? null : Border.all(color: isDark ? Colors.white10 : Colors.black12);
+    final border =
+        me ? null : Border.all(color: isDark ? Colors.white10 : Colors.black12);
 
     final radius = BorderRadius.only(
       topLeft: const Radius.circular(18),
       topRight: const Radius.circular(18),
-      bottomLeft: Radius.circular(me ? 18 : 4),  // tail
+      bottomLeft: Radius.circular(me ? 18 : 4), // tail
       bottomRight: Radius.circular(me ? 4 : 18), // tail
     );
 
@@ -386,7 +397,9 @@ class _MessageBubble extends StatelessWidget {
           BoxShadow(
             color: me
                 ? Theme.of(context).primaryColor.withOpacity(0.25)
-                : (isDark ? Colors.black.withOpacity(0.30) : Colors.black.withOpacity(0.06)),
+                : (isDark
+                    ? Colors.black.withOpacity(0.30)
+                    : Colors.black.withOpacity(0.06)),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -426,15 +439,19 @@ class _MessageBubble extends StatelessWidget {
               padding: const EdgeInsets.only(right: 8),
               child: CircleAvatar(
                 radius: 14,
-                backgroundColor:
-                    isDark ? Colors.blueGrey.shade800 : Colors.blueGrey.shade100,
+                backgroundColor: isDark
+                    ? Colors.blueGrey.shade800
+                    : Colors.blueGrey.shade100,
                 child: const Icon(Icons.smart_toy_outlined, size: 16),
               ),
             ),
           // long press: copy
           GestureDetector(
             onLongPress: () async {
-              showShareCopyDialog(context, title: "Copy Or Share Message", lines: [message.text], shareLines: [message.text]);
+              showShareCopyDialog(context,
+                  title: "Copy Or Share Message",
+                  lines: [message.text],
+                  shareLines: [message.text]);
               HapticFeedback.mediumImpact();
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Copied message')),
@@ -515,7 +532,7 @@ class _TypingBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final isDark = isDarkMode(context);
     final radius = const BorderRadius.only(
       topLeft: Radius.circular(18),
       topRight: Radius.circular(18),
@@ -530,7 +547,8 @@ class _TypingBubble extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 14,
-            backgroundColor: isDark ? Colors.blueGrey.shade800 : Colors.blueGrey.shade100,
+            backgroundColor:
+                isDark ? Colors.blueGrey.shade800 : Colors.blueGrey.shade100,
             child: const Icon(Icons.smart_toy_outlined, size: 16),
           ),
           const SizedBox(width: 8),
@@ -539,7 +557,8 @@ class _TypingBubble extends StatelessWidget {
             decoration: BoxDecoration(
               color: isDark ? const Color(0xFF1A1F24) : Colors.white,
               borderRadius: radius,
-              border: Border.all(color: isDark ? Colors.white10 : Colors.black12),
+              border:
+                  Border.all(color: isDark ? Colors.white10 : Colors.black12),
             ),
             child: const _TypingDots(),
           ),
@@ -556,7 +575,8 @@ class _TypingDots extends StatefulWidget {
   State<_TypingDots> createState() => _TypingDotsState();
 }
 
-class _TypingDotsState extends State<_TypingDots> with SingleTickerProviderStateMixin {
+class _TypingDotsState extends State<_TypingDots>
+    with SingleTickerProviderStateMixin {
   late final AnimationController c;
   late final Animation<double> a1;
   late final Animation<double> a2;
@@ -565,10 +585,15 @@ class _TypingDotsState extends State<_TypingDots> with SingleTickerProviderState
   @override
   void initState() {
     super.initState();
-    c = AnimationController(vsync: this, duration: const Duration(milliseconds: 1000))..repeat();
-    a1 = CurvedAnimation(parent: c, curve: const Interval(0.0, 0.6, curve: Curves.easeInOut));
-    a2 = CurvedAnimation(parent: c, curve: const Interval(0.2, 0.8, curve: Curves.easeInOut));
-    a3 = CurvedAnimation(parent: c, curve: const Interval(0.4, 1.0, curve: Curves.easeInOut));
+    c = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 1000))
+      ..repeat();
+    a1 = CurvedAnimation(
+        parent: c, curve: const Interval(0.0, 0.6, curve: Curves.easeInOut));
+    a2 = CurvedAnimation(
+        parent: c, curve: const Interval(0.2, 0.8, curve: Curves.easeInOut));
+    a3 = CurvedAnimation(
+        parent: c, curve: const Interval(0.4, 1.0, curve: Curves.easeInOut));
   }
 
   @override
@@ -596,7 +621,8 @@ class _TypingDotsState extends State<_TypingDots> with SingleTickerProviderState
             ),
           ),
         );
-    return Row(mainAxisSize: MainAxisSize.min, children: [dot(a1), dot(a2), dot(a3)]);
+    return Row(
+        mainAxisSize: MainAxisSize.min, children: [dot(a1), dot(a2), dot(a3)]);
   }
 }
 
@@ -619,7 +645,8 @@ class _DaySeparator extends StatelessWidget {
           const Expanded(child: Divider(height: 1)),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Text(label, style: const TextStyle(color: Colors.grey, fontSize: 12)),
+            child: Text(label,
+                style: const TextStyle(color: Colors.grey, fontSize: 12)),
           ),
           const Expanded(child: Divider(height: 1)),
         ],
@@ -662,7 +689,7 @@ class _ComposerState extends State<_Composer> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final isDark = isDarkMode(context);
 
     return SafeArea(
       top: false,
@@ -670,22 +697,25 @@ class _ComposerState extends State<_Composer> {
         padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
         child: Row(
           children: [
-            // _IconBtn(icon: Icons.attach_file, 
-            // onTap: () { 
+            // _IconBtn(icon: Icons.attach_file,
+            // onTap: () {
             //   ChatGPTAttachButton(context, onSelected: (value) {
-                
+
             //   },);
             //   HapticFeedback.heavyImpact();
             //  }),
-              AttachButton(icon: Icons.attach_file, onSelected: (value) {
-                 if (value == AttachmentAction.contact) {
-                   showContactDialog(context);
-                 } else if (value == AttachmentAction.gallery) {
-                    comingSoonSnackbar(context);
-                 } else if (value == AttachmentAction.upload) {
-                    comingSoonSnackbar(context);
-                 }  
-            },),
+            AttachButton(
+              icon: Icons.attach_file,
+              onSelected: (value) {
+                if (value == AttachmentAction.contact) {
+                  showContactDialog(context);
+                } else if (value == AttachmentAction.gallery) {
+                  comingSoonSnackbar(context);
+                } else if (value == AttachmentAction.upload) {
+                  comingSoonSnackbar(context);
+                }
+              },
+            ),
             const SizedBox(width: 6),
             Expanded(
               child: Container(
@@ -693,10 +723,13 @@ class _ComposerState extends State<_Composer> {
                 decoration: BoxDecoration(
                   color: isDark ? const Color(0xFF151A1F) : Colors.white,
                   borderRadius: BorderRadius.circular(28),
-                  border: Border.all(color: isDark ? Colors.white12 : Colors.black12),
+                  border: Border.all(
+                      color: isDark ? Colors.white12 : Colors.black12),
                   boxShadow: [
                     BoxShadow(
-                      color: isDark ? Colors.black.withOpacity(0.35) : Colors.black.withOpacity(0.06),
+                      color: isDark
+                          ? Colors.black.withOpacity(0.35)
+                          : Colors.black.withOpacity(0.06),
                       blurRadius: 10,
                       offset: const Offset(0, 4),
                     ),
@@ -708,7 +741,8 @@ class _ComposerState extends State<_Composer> {
                   maxLines: 6,
                   textInputAction: TextInputAction.newline,
                   decoration: const InputDecoration(
-                    hintText: 'Message Samarth’s Assistant… (supports *Markdown* + ```code```)',
+                    hintText:
+                        'Message Samarth’s Assistant… (supports *Markdown* + ```code```)',
                     border: InputBorder.none,
                   ),
                   onSubmitted: (v) => widget.onSend(v),
@@ -747,9 +781,8 @@ class _IconBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Material(
-      color: isDark ? const Color(0xFF151A1F) : Colors.white,
+      color: isDarkMode(context) ? const Color(0xFF151A1F) : Colors.white,
       borderRadius: BorderRadius.circular(12),
       child: InkWell(
         onTap: onTap,
@@ -767,7 +800,11 @@ class _RoundBtn extends StatelessWidget {
   final Color color;
   final IconData icon;
   final VoidCallback onTap;
-  const _RoundBtn({super.key, required this.color, required this.icon, required this.onTap});
+  const _RoundBtn(
+      {super.key,
+      required this.color,
+      required this.icon,
+      required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -801,15 +838,11 @@ String _fmtTime(DateTime t) {
   return '$h:$m $ampm';
 }
 
-
-
-
-
-
 // Call this instead of your old switch:
 // handleUserMessage(originalMessage);
 
-Future<void> handleUserMessage(String originalMessage, StreamController<Message> messageController) async {
+Future<void> handleUserMessage(
+    String originalMessage, StreamController<Message> messageController) async {
   final text = originalMessage.trim();
   final lower = text.toLowerCase();
 
@@ -841,18 +874,20 @@ Future<void> handleUserMessage(String originalMessage, StreamController<Message>
   List<Project>? _findProjectByName(String query) {
     final q = query.toLowerCase();
     try {
-      return projects.where(
-        (p) =>
-            p.title.toString().toLowerCase().contains(q) ||
-            (p.subtitle).toLowerCase().contains(q),
-      ).toList();
+      return projects
+          .where(
+            (p) =>
+                p.title.toString().toLowerCase().contains(q) ||
+                (p.subtitle).toLowerCase().contains(q),
+          )
+          .toList();
     } catch (_) {
       return null;
     }
   }
 
   // ignore: no_leading_underscores_for_local_identifiers
-  String _bulletify(List items) => items.map((e) => "• $e").join("\n");
+  String _bulletify(List items) => items.map((e) => "• ${e.name}").join("\n");
 
   // -------------- small talk --------------
   if (hasAny(['hello', 'hi', 'hey', 'yo', 'namaste', 'hola'])) {
@@ -861,12 +896,14 @@ Future<void> handleUserMessage(String originalMessage, StreamController<Message>
   }
 
   if (hasAny(['how are you', 'how r u', 'how’s it going'])) {
-    reply("I’m just a bunch of code, but thanks for asking! 😊 What can I do for you?");
+    reply(
+        "I’m just a bunch of code, but thanks for asking! 😊 What can I do for you?");
     return;
   }
 
   if (hasAny(['who are you', 'your name', 'introduce yourself'])) {
-    reply("I’m Samarth’s Assistant. I can show projects, skills, experience, resume, and links. Type **help** to see everything I can do.");
+    reply(
+        "I’m Samarth’s Assistant. I can show projects, skills, experience, resume, and links. Type **help** to see everything I can do.");
     return;
   }
 
@@ -882,40 +919,39 @@ Future<void> handleUserMessage(String originalMessage, StreamController<Message>
 
   // -------------- help / menu --------------
   if (hasAny(['help', 'what can you do', 'menu', 'options'])) {
-    reply(
-      "Here’s what I can do:\n\n"
-      "• **projects** – list all projects\n\n"
-      "• **project 2** or **open e-commerce** – show details + links\n\n"
-      "• **skills** – list technical skills\n\n"
-      "• **experience** – show work experience\n\n"
-      "• **resume** or **cv** – view/download resume\n\n"
-      "• **github / linkedin / twitter / gfg / website** – open profile links\n\n"
-      "• **contact / email / phone / whatsapp** – show contact details\n\n"
-      "• **version** or **apk** – show app version & APK link\n\n"
-    );
+    reply("Here’s what I can do:\n\n"
+        "• **projects** – list all projects\n\n"
+        "• **open Project_Name** – show details + links\n\n"
+        "• **skills** – list technical skills\n\n"
+        "• **experience** – show work experience\n\n"
+        "• **resume** or **cv** – view/download resume\n\n"
+        "• **github / linkedin / twitter / gfg / website** – open profile links\n\n"
+        "• **contact / email / phone / whatsapp** – show contact details\n\n"
+        "• **version** or **apk** – show app version & APK link\n\n");
     return;
   }
 
   // -------------- resume --------------
   if (hasAny(['resume', 'cv'])) {
-    reply(
-      "Here’s Samarth’s resume:\n"
-      "• View: $resumeUrl\n"
-      "• Direct download: $resumeDownloadUrl"
-    );
+    reply("Here’s Samarth’s resume:\n\n"
+        "• View: $resumeUrl\n\n"
+        "• Direct download: $resumeDownloadUrl");
     return;
   }
-   // -------------- personal details --------------
+  // -------------- personal details --------------
   if (hasAny(['age', 'old are you', 'your age'])) {
-     final age = DateTime.now().year - 2002; // Replace with actual birth year
-     reply("Samarth is $age years old.");
+    final age = DateTime.now().year - 2002; // Replace with actual birth year
+    reply("Samarth is $age years old.");
     return;
   }
 
   if (hasAny(['dob', 'Date Of Birth', 'samarth\'s dob'])) {
-     final dob = DateTime(2002, 7, 28); // Replace with actual birth date
-     final age = DateTime.now().year - dob.year;
-     reply("Samarth's date of birth is ${dob.toLocal()} and he is $age years old.");
+    final dob = DateTime(2002, 7, 28);
+    final age = DateTime.now().year - dob.year;
+    final formattedDob = "${dob.day.toString().padLeft(2, '0')}-"
+        "${dob.month.toString().padLeft(2, '0')}-"
+        "${dob.year}";
+    reply("Samarth's date of birth is $formattedDob and he is $age years old.");
     return;
   }
 
@@ -965,8 +1001,8 @@ Future<void> handleUserMessage(String originalMessage, StreamController<Message>
   if (hasAny(['experience', 'work history', 'work exp', 'job'])) {
     final sb = StringBuffer();
     for (final exp in experiences) {
-      sb.writeln("**${exp.role}** @ ${exp.company}");
-      sb.writeln(exp.duration);
+      sb.writeln("**${exp.role}** @ ${exp.company}\n\n");
+      sb.writeln('**Duration:** ${exp.duration}\n\n');
       sb.writeln("${exp.description}\n");
     }
     reply(sb.toString());
@@ -978,11 +1014,10 @@ Future<void> handleUserMessage(String originalMessage, StreamController<Message>
     final sb = StringBuffer("Here are Samarth’s projects:\n");
     for (int i = 0; i < projects.length; i++) {
       final p = projects[i];
-      sb.writeln(
-          "${i + 1}. ${p.title} — ${p.subtitle.trim()}");
+      sb.writeln("${i + 1}. ${p.title} — ${p.subtitle.trim()}");
     }
     sb.writeln(
-        "\nAsk for **project 1** (or the name) to see details, GitHub, and Live link.");
+        "\nAsk for **open Project_Name** to see details, GitHub, and Live link.");
     reply(sb.toString());
     return;
   }
@@ -996,8 +1031,11 @@ Future<void> handleUserMessage(String originalMessage, StreamController<Message>
       p = projects[idx - 1];
     } else {
       // Try name match
-      final foundProjects = _findProjectByName(lower.replaceAll(RegExp(r'open|details?|show'), '').trim());
-      p = (foundProjects != null && foundProjects.isNotEmpty) ? foundProjects.first : null;
+      final foundProjects = _findProjectByName(
+          lower.replaceAll(RegExp(r'open|details?|show'), '').trim());
+      p = (foundProjects != null && foundProjects.isNotEmpty)
+          ? foundProjects.first
+          : null;
     }
 
     if (p != null) {
@@ -1013,7 +1051,8 @@ Future<void> handleUserMessage(String originalMessage, StreamController<Message>
       return;
     }
     // If user asked to open but we couldn't resolve:
-    reply("I couldn’t find that project. Try **project 1** or part of its name (e.g., **open portfolio**).");
+    reply(
+        "I couldn’t find that project. Try **Open Project_Name** or any details of that project.");
     return;
   }
 
@@ -1021,33 +1060,22 @@ Future<void> handleUserMessage(String originalMessage, StreamController<Message>
   if (hasAny(['version', 'build', 'apk', 'download app'])) {
     final apkUrl =
         "https://github.com/samadagade/flutter-portfolio/releases/download/v${AppInfo.version}/flutter_portfolio_v${AppInfo.version}.apk";
-    reply(
-      "App version: ${AppInfo.version} (build ${AppInfo.buildNumber})\n"
-      "Android APK: $apkUrl"
-    );
+    reply("App version: ${AppInfo.version} (build ${AppInfo.buildNumber})\n\n"
+        "Android APK: $apkUrl");
     return;
   }
 
   // -------------- easter eggs --------------
   if (hasAny(['joke'])) {
-    reply("Why do programmers prefer dark mode? Because light attracts bugs. 🐛");
+    reply(
+        "Why do programmers prefer dark mode? Because light attracts bugs. 🐛");
     return;
   }
 
   // -------------- default fallback --------------
-  reply(
-    "I’m not sure how to respond to that yet 🤔\n\n"
-    "Try **help** to see what I can do."
-  );
+  reply("I’m not sure how to respond to that yet 🤔\n\n"
+      "Try **help** to see what I can do.");
 }
-
-
-
-
-
-
-
-
 
 enum AttachmentAction { upload, gallery, camera, audio, contact, location }
 
@@ -1083,7 +1111,8 @@ class _ChatGPTAttachButtonState extends State<AttachButton> {
       controller: _menuController,
       alignmentOffset: const Offset(0, 8), // a little gap under the button
       style: MenuStyle(
-        padding: const WidgetStatePropertyAll(EdgeInsets.symmetric(vertical: 8, horizontal: 8)),
+        padding: const WidgetStatePropertyAll(
+            EdgeInsets.symmetric(vertical: 8, horizontal: 8)),
         backgroundColor: WidgetStatePropertyAll(scheme.surface),
         elevation: const WidgetStatePropertyAll(8),
         shape: WidgetStatePropertyAll(

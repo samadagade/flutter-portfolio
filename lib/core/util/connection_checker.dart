@@ -1,15 +1,13 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
-Future<bool> isConnected() async {
-  var connectivityResult = await Connectivity().checkConnectivity();
+class NetworkUtils {
+  static final InternetConnection _internetChecker = InternetConnection();
 
-  // ignore: unrelated_type_equality_checks
-  if (connectivityResult == ConnectivityResult.none) {
-    // No network connection at all
-    return false;
+  static Future<bool> get isConnected async {
+    var connectivityResult = await Connectivity().checkConnectivity();
+    // ignore: unrelated_type_equality_checks
+    if (connectivityResult == ConnectivityResult.none) return false;
+    return await _internetChecker.hasInternetAccess;
   }
-
-  // Now check actual internet access
-  return await InternetConnection().hasInternetAccess;
 }

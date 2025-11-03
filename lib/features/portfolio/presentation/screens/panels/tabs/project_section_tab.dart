@@ -1,13 +1,12 @@
 import 'package:flip_card/flip_card.dart';
 import 'package:flip_card/flip_card_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart'
-    show FaIcon, FontAwesomeIcons;
 import 'package:portfolio/app_config.dart';
 import 'package:portfolio/core/util/lauch_url.dart';
 import 'package:portfolio/core/util/utility.dart';
 import 'package:portfolio/core/widgets/share_copy.dart';
 import 'package:portfolio/features/portfolio/domain/entities/project.dart';
+import 'package:portfolio/features/portfolio/domain/entities/skill.dart';
 
 Widget buildProjectsSection() {
   return _ProjectsSection();
@@ -20,9 +19,9 @@ class _ProjectsSection extends StatefulWidget {
 
 class _ProjectsSectionState extends State<_ProjectsSection> {
   final TextEditingController _searchCtrl = TextEditingController();
-  final Set<String> _selectedSkills = <String>{};
+  final Set<Skill> _selectedSkills = <Skill>{};
 
-  late final Set<String> _allSkills;
+  late final Set<Skill> _allSkills;
   bool _isSearching = false;
 
   @override
@@ -31,18 +30,16 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
     _allSkills = _extractAllSkills();
   }
 
-  Set<String> _extractAllSkills() {
-    final s = <String>{};
-    for (final p in projects) {
-      final techs = (p.technologies) as List? ?? [];
-      for (var t in techs) {
-        if (t is String && t.trim().isNotEmpty) s.add(t.trim());
-      }
+  Set<Skill> _extractAllSkills() {
+    final skills = <Skill>{};
+    for (final project in projects) {
+      final techs = project.technologies;
+      skills.addAll(techs);
     }
-    return s;
+    return skills;
   }
 
-  void _toggleSkill(String skill) {
+  void _toggleSkill(Skill skill) {
     setState(() {
       if (_selectedSkills.contains(skill)) {
         _selectedSkills.remove(skill);
@@ -55,56 +52,20 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
   List<Project> get _filtered {
     final q = _searchCtrl.text.toLowerCase().trim();
     return projects.where((p) {
-      final title = (p.title).toString().toLowerCase();
-      final subtitle = (p.subtitle).toString().toLowerCase();
-      final techs =
-          ((p.technologies) as List).map((e) => e.toString()).toList();
+      final title = p.title.toLowerCase();
+      final subtitle = p.subtitle.toLowerCase();
 
       final matchesQuery =
           q.isEmpty || title.contains(q) || subtitle.contains(q);
 
       final matchesSkills = _selectedSkills.isEmpty ||
-          techs.any((t) => _selectedSkills.contains(t));
+          p.technologies.any(
+            (tech) => _selectedSkills
+                .any((s) => s.name.toLowerCase() == tech.name.toLowerCase()),
+          );
 
       return matchesQuery && matchesSkills;
     }).toList();
-  }
-
-  Widget _getTechIcon(String tech) {
-    switch (tech.toLowerCase()) {
-      case 'flutter':
-        return Image.asset("assets/images/project/flutter.png");
-      case 'firebase':
-        return Image.asset("assets/images/project/firebase.png");
-      case 'react':
-        return const FaIcon(FontAwesomeIcons.react,
-            size: 16, color: Colors.cyan);
-      case 'git':
-        return Image.asset("assets/images/project/git.png");
-      case 'junit':
-        return Image.asset("assets/images/project/junit.png");
-      case 'github':
-        return const FaIcon(FontAwesomeIcons.github,
-            size: 16, color: Colors.black);
-      case 'java':
-        return const FaIcon(FontAwesomeIcons.java,
-            size: 16, color: Colors.redAccent);
-      case 'mysql':
-        return const FaIcon(FontAwesomeIcons.database,
-            size: 16, color: Colors.teal);
-      case 'html':
-        return const FaIcon(FontAwesomeIcons.html5,
-            size: 16, color: Colors.deepOrange);
-      case 'css':
-        return const FaIcon(FontAwesomeIcons.css3Alt,
-            size: 16, color: Colors.blue);
-      case 'js':
-      case 'javascript':
-        return const FaIcon(FontAwesomeIcons.js,
-            size: 16, color: Colors.orange);
-      default:
-        return const Icon(Icons.memory, size: 16, color: Colors.indigo);
-    }
   }
 
   @override
@@ -275,7 +236,7 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
                             lines: [project.launchUrl],
                             shareLines: [
                               "💻 Live Demo : ${project.launchUrl}\n"
-                              "🌐 Source Code : ${project.githubUrl}\n",
+                                  "🌐 Source Code : ${project.githubUrl}\n",
                               "🐞 Have a Bug or Feature Idea? : ${project.githubUrl}/issues",
                             ],
                           );
@@ -291,8 +252,10 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
                                 direction: FlipDirection.VERTICAL,
                                 side: CardSide.FRONT,
                                 alignment: Alignment.center,
-                                front: _buildFront(context: context, project: project),
-                                back: _buildBack(context: context, project: project),
+                                front: _buildFront(
+                                    context: context, project: project),
+                                back: _buildBack(
+                                    context: context, project: project),
                               ),
                             ],
                           ),
@@ -368,7 +331,7 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
                 side: const BorderSide(color: Colors.deepPurple),
               ),
             ),
-            if (project.apkUrl != '')
+            if (project.hasApk)
               Tooltip(
                 message: 'Download APK',
                 child: IconButton(
@@ -390,7 +353,8 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
     );
   }
 
-  Widget _buildFront({required BuildContext context, required Project project}) {
+  Widget _buildFront(
+      {required BuildContext context, required Project project}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -445,8 +409,8 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
             runSpacing: 6,
             children: (project.technologies as List)
                 .map<Widget>((tech) => FilterChip(
-                      label: Text(tech),
-                      avatar: _getTechIcon(tech),
+                      label: Text(tech.name),
+                      avatar: tech.icon,
                       selected: _selectedSkills.contains(tech),
                       onSelected: (_) => _toggleSkill(tech),
                       showCheckmark: false,
@@ -469,8 +433,9 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
   }
 
   Future<void> _openSkillsDialog() async {
-    final temp = Set<String>.from(_selectedSkills);
-    final allSkills = _allSkills.toList()..sort();
+    final temp = Set<Skill>.from(_selectedSkills);
+    final allSkills = _allSkills.toList()
+      ..sort((a, b) => a.name.compareTo(b.name));
     final TextEditingController searchCtrl = TextEditingController();
     String query = '';
 
@@ -497,7 +462,7 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
                   final filtered = query.isEmpty
                       ? allSkills
                       : allSkills
-                          .where((s) => s.toLowerCase().contains(query))
+                          .where((s) => s.name.toLowerCase().contains(query))
                           .toList();
 
                   return ConstrainedBox(
@@ -620,9 +585,8 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
                                       ),
                                     for (final skill in filtered)
                                       ChoiceChip(
-                                        label: Text(skill,
-                                            overflow: TextOverflow.ellipsis),
-                                        avatar: _getTechIcon(skill),
+                                        label: Text(skill.name),
+                                        avatar: skill.icon,
                                         selected: temp.contains(skill),
                                         onSelected: (_) => setDialogState(() {
                                           temp.contains(skill)

@@ -22,7 +22,6 @@ class AppDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     final year = DateTime.now().year;
   
     return Drawer(
@@ -41,7 +40,7 @@ class AppDrawer extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(16, 20, 16, 20),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: isDark
+                  colors: isDarkMode(context)
                       ? [Colors.blueGrey.shade800, Colors.blueGrey.shade700]
                       : [Colors.blue.shade50, Colors.blue.shade100],
                   begin: Alignment.topLeft,
@@ -140,7 +139,7 @@ class AppDrawer extends StatelessWidget {
                   SwitchListTile.adaptive(
                     secondary: const Icon(Icons.brightness_6_rounded),
                     title: const Text("Toggle Theme"),
-                    value: isDark,
+                    value: isDarkMode(context),
                     onChanged: (_) {
                       Navigator.pop(context);
                       onToggleTheme();

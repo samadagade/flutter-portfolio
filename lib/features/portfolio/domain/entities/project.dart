@@ -1,9 +1,11 @@
+import 'package:portfolio/features/portfolio/domain/entities/skill.dart';
+
 class Project {
   final String id;
   final String title;
   final String subtitle;
   final String image;
-  final List<String> technologies;
+  final List<Skill> technologies;
   final String githubUrl;
   final String launchUrl;
   final String apkUrl;
@@ -20,4 +22,6 @@ class Project {
     this.apkUrl = '',
     this.date = 'Recently',
   });
+
+  bool get hasApk => apkUrl.isNotEmpty;
 }

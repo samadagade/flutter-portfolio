@@ -10,8 +10,8 @@ noInternetSnackbar(BuildContext context) {
     icon: Icons.wifi_off,
     backgroundColor: Colors.redAccent.shade700,
     actionLabel: 'Retry',
-    onAction: () {
-      isConnected();
+    onAction: () async {
+     await NetworkUtils.isConnected;
     },
   );
 }

@@ -8,7 +8,7 @@ import 'core/util/app_details.dart';
 String resumeUrl =
     "https://drive.google.com/file/d/1Ptw9xWTdnjbF0SPnrQzXW1hwj75ZFYyw/view";
 String resumeDownloadUrl =
-    "https://drive.google.com/file/d/1Ptw9xWTdnjbF0SPnrQzXW1hwj75ZFYyw";
+    "https://drive.google.com/uc?export=download&id=1Ptw9xWTdnjbF0SPnrQzXW1hwj75ZFYyw";
 String linkedinProfileUrl = "https://www.linkedin.com/in/samarth-dagade/";
 String githubProfileUrl = "https://github.com/samadagade";
 String twitterProfileUrl = "https://twitter.com/DagadeSamarth";
@@ -39,7 +39,13 @@ final List<Project> projects = List.unmodifiable(const [
         "E-Commerce app with Firebase Auth, Bloc, wishlist, cart, and clean UI built using Flutter.",
     image:
         "https://cdn.acowebs.com/wp-content/uploads/2019/02/Impact-of-eCommerce-On-Society.png",
-    technologies: ["Flutter", "Firebase", "Bloc", "Git", "Github"],
+    technologies: [
+      Skill(name: 'Flutter'),
+      Skill(name: 'Firebase'),
+      Skill(name: 'Bloc'),
+      Skill(name: 'Git'),
+      Skill(name: 'GitHub')
+    ],
     githubUrl: "https://github.com/samadagade/E-commerce-App",
     launchUrl: "https://luma-ecommerce.netlify.app/",
   ),
@@ -49,7 +55,13 @@ final List<Project> projects = List.unmodifiable(const [
     subtitle:
         "Developed a modular Java Smart Home System (TV, Thermostat, Speakers) using OOP; ensured reliability via full JUnit testing.",
     image: "assets/images/project/smart_home_hub.png",
-    technologies: ["Java", "OOP", "Junit", "Git", "Github"],
+    technologies: [
+      Skill(name: 'Java'),
+      Skill(name: 'OOP'),
+      Skill(name: 'Junit'),
+      Skill(name: 'Git'),
+      Skill(name: 'GitHub')
+    ],
     githubUrl: "https://github.com/samadagade/Smart-Home",
     launchUrl: "https://github.com/samadagade/Smart-Home",
   ),
@@ -59,7 +71,13 @@ final List<Project> projects = List.unmodifiable(const [
     subtitle:
         "Developed a Glassmorphism-styled web app for fast multi-threaded downloads with connection detection and pause/resume control.",
     image: "assets/images/project/multi-threaded-file-downloader.jpg",
-    technologies: ["HTML", "CSS", "JS", "Git", "Github"],
+    technologies: [
+      Skill(name: 'HTML'),
+      Skill(name: 'CSS'),
+      Skill(name: 'JS'),
+      Skill(name: 'Git'),
+      Skill(name: 'GitHub')
+    ],
     githubUrl: "https://github.com/samadagade/Multi-Threaded-Downloader",
     launchUrl: "https://samadagade.github.io/Multi-Threaded-Downloader/",
   ),
@@ -69,7 +87,13 @@ final List<Project> projects = List.unmodifiable(const [
     subtitle:
         "A lightweight, browser-based live editor that lets you write and instantly preview HTML, CSS, and JavaScript in real time.",
     image: "assets/images/project/online-code-editor.png",
-    technologies: ["HTML", "CSS", "JS", "Git", "Github"],
+    technologies: [
+      Skill(name: 'HTML'),
+      Skill(name: 'CSS'),
+      Skill(name: 'JS'),
+      Skill(name: 'Git'),
+      Skill(name: 'GitHub')
+    ],
     githubUrl: "https://github.com/samadagade/OnlineCodeEditor",
     launchUrl: "https://samadagade.github.io/OnlineCodeEditor/",
   ),
@@ -78,9 +102,15 @@ final List<Project> projects = List.unmodifiable(const [
     title: "Portfolio Website",
     subtitle: "A personal portfolio built using HTML, CSS, and JavaScript.",
     image: "assets/images/project/portfolio.png",
-    technologies: ["HTML", "CSS", "JS", "Git", "Github"],
+    technologies: [
+      Skill(name: 'HTML'),
+      Skill(name: 'CSS'),
+      Skill(name: 'JS'),
+      Skill(name: 'Git'),
+      Skill(name: 'GitHub')
+    ],
     githubUrl: "https://github.com/samadagade/portfolio",
-    launchUrl: "https://samadagade.github.io/portfolio/##",
+    launchUrl: "https://samadagade.github.io/portfolio/",
   ),
 ]);
 

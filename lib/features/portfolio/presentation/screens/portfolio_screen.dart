@@ -112,7 +112,7 @@ class _PortfolioState extends State<Portfolio>
                     delegate: PortfolioSearchDelegate(
                       projects: projects,
                       experiences: experiences,
-                      skills: skills, 
+                      skills: skills,
                     ),
                   );
 
@@ -140,7 +140,6 @@ class _PortfolioState extends State<Portfolio>
                   }
                 },
               ),
-            // if (kIsWeb && screenWidth > 405)
             IconButton(
               onPressed: widget.toggleTheme,
               icon: Icon(
@@ -149,14 +148,12 @@ class _PortfolioState extends State<Portfolio>
                     : Icons.dark_mode,
               ),
             ),
-            // if (kIsWeb && screenWidth > 405)
             Container(
               height: 18,
               width: 1,
               color: Colors.grey.shade400,
               margin: const EdgeInsets.symmetric(horizontal: 8),
             ),
-            // if (kIsWeb && screenWidth > 405)
             ContactButton(
               buttonText: "Contact Me",
               icon: const FaIcon(
@@ -170,7 +167,6 @@ class _PortfolioState extends State<Portfolio>
               onLongPress: () => showShareCopyDialogByType(
                   context: context, option: PopupOption.contactme),
             ),
-            if (kIsWeb && screenWidth > 405) const SizedBox(width: 16),
           ],
         ),
         body: const Body(),
@@ -312,11 +308,12 @@ class PortfolioSearchDelegate extends SearchDelegate<PortfolioSearchResult?> {
         p.launchUrl,
         p.id,
         p.image,
-      // ignore: unnecessary_null_comparison
-      ].where((v) => v != null)
-       .map((v) => v.toString())
-       .join(' \n ')
-       .toLowerCase();
+        // ignore: unnecessary_null_comparison
+      ]
+          .where((v) => v != null)
+          .map((v) => v.toString())
+          .join(' \n ')
+          .toLowerCase();
 
       final score = _score(haystack, text);
       if (score > 0) {
@@ -342,11 +339,12 @@ class PortfolioSearchDelegate extends SearchDelegate<PortfolioSearchResult?> {
         e.company,
         e.duration,
         e.description,
-      // ignore: unnecessary_null_comparison
-      ].where((v) => v != null)
-       .map((v) => v.toString())
-       .join(' \n ')
-       .toLowerCase();
+        // ignore: unnecessary_null_comparison
+      ]
+          .where((v) => v != null)
+          .map((v) => v.toString())
+          .join(' \n ')
+          .toLowerCase();
 
       final score = _score(haystack, text);
       if (score > 0) {
