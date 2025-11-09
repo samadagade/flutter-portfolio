@@ -9,16 +9,19 @@ import 'package:portfolio/features/portfolio/domain/entities/project.dart';
 import 'package:portfolio/features/portfolio/domain/entities/skill.dart';
 
 Widget buildProjectsSection() {
-  return _ProjectsSection();
+  return _ProjectsSection(key: projectsSectionKey);
 }
 
 class _ProjectsSection extends StatefulWidget {
+  const _ProjectsSection({super.key});
   @override
-  State<_ProjectsSection> createState() => _ProjectsSectionState();
+  State<_ProjectsSection> createState() => ProjectsSectionState();
 }
 
-class _ProjectsSectionState extends State<_ProjectsSection> {
+class ProjectsSectionState extends State<_ProjectsSection> {
   final TextEditingController _searchCtrl = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
+  String? highlightProjectId;
   final Set<Skill> _selectedSkills = <Skill>{};
 
   late final Set<Skill> _allSkills;
@@ -28,6 +31,56 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
   void initState() {
     super.initState();
     _allSkills = _extractAllSkills();
+  }
+
+  void scrollToProject(Project p) {
+    // Find project index
+    final index = projects.indexWhere((x) => x.id == p.id);
+    if (index == -1) return;
+    setState(() {
+      highlightProjectId = p.id;
+    });
+    // Wait a frame to ensure ListView is built
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Use RenderBox to measure each card dynamically
+      final listViewContext =
+          _scrollController.position.context.notificationContext;
+      if (listViewContext == null) return;
+
+      final listViewBox = listViewContext.findRenderObject() as RenderBox?;
+      if (listViewBox == null) return;
+
+      // Try to locate the specific card
+      final itemKey = GlobalObjectKey("project_$index");
+      final itemContext = itemKey.currentContext;
+      if (itemContext == null) {
+        // fallback if not yet rendered
+        _scrollController.animateTo(
+          index * 250.0,
+          duration: const Duration(milliseconds: 400),
+          curve: Curves.easeInOut,
+        );
+        return;
+      }
+
+      final box = itemContext.findRenderObject() as RenderBox?;
+      if (box != null) {
+        final offset = box.localToGlobal(Offset.zero, ancestor: listViewBox).dy;
+        _scrollController.animateTo(
+          _scrollController.offset + offset - 80, // small padding offset
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOutCubic,
+        );
+      }
+    });
+
+    Future.delayed(Duration(seconds: 2), (){
+       if(mounted && highlightProjectId == p.id){
+        setState(() {
+          highlightProjectId = null;
+        });
+       }
+    });
   }
 
   Set<Skill> _extractAllSkills() {
@@ -64,7 +117,7 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
                 .any((s) => s.name.toLowerCase() == tech.name.toLowerCase()),
           );
 
-      return matchesQuery && matchesSkills;
+      return matchesQuery && matchesSkills && p.isFeatured;
     }).toList();
   }
 
@@ -212,9 +265,11 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
         Expanded(
           child: ListView.builder(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            controller: _scrollController,
             itemCount: _filtered.length,
             itemBuilder: (context, index) {
               final project = _filtered[index];
+              final isHighlight = highlightProjectId == project.id;
               return StatefulBuilder(
                 builder: (context, setStateItem) {
                   return Container(
@@ -224,6 +279,15 @@ class _ProjectsSectionState extends State<_ProjectsSection> {
                           ? Colors.grey[900]
                           : Colors.white,
                       borderRadius: BorderRadius.circular(12),
+                      boxShadow: isHighlight
+                          ? [
+                              BoxShadow(
+                                color: Colors.amberAccent.withOpacity(0.6),
+                                blurRadius: 20,
+                                spreadRadius: 4,
+                              ),
+                            ]
+                          : [],
                     ),
                     child: Material(
                       color: Colors.transparent,

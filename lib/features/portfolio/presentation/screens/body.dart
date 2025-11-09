@@ -9,16 +9,22 @@ class Body extends StatefulWidget {
 
   @override
   // ignore: library_private_types_in_public_api
-  _BodyState createState() => _BodyState();
+  BodyState createState() => BodyState();
 }
 
-class _BodyState extends State<Body> with SingleTickerProviderStateMixin {
+class BodyState extends State<Body> with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: showBlogsTab ? 4 : 3, vsync: this);
+  }
+
+  void changeTab(int index) {
+    if (index >= 0 && index < _tabController.length) {
+      _tabController.animateTo(index);
+    }
   }
 
   @override

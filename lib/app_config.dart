@@ -1,7 +1,10 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:portfolio/features/portfolio/domain/entities/experience.dart';
 import 'package:portfolio/features/portfolio/domain/entities/project.dart';
 import 'package:portfolio/features/portfolio/domain/entities/skill.dart';
+import 'package:portfolio/features/portfolio/presentation/screens/body.dart';
+import 'package:portfolio/features/portfolio/presentation/screens/panels/tabs/project_section_tab.dart';
 import 'core/util/app_details.dart';
 
 // Social media and contact URLs
@@ -23,7 +26,7 @@ String whatsappContactUrl = "https://wa.me/9325728101";
 bool showBlogsTab = false;
 bool showImagesInProjectTab = true;
 bool showFooter = kIsWeb;
-bool showSearchButtonInAppBar = false;
+bool showSearchButtonInAppBar = true;
 bool showDrawer = false;
 
 // contact details
@@ -143,3 +146,9 @@ final List<Skill> skills = List.unmodifiable(const [
   Skill(name: "Unit"),
   Skill(name: "Spring Boot"),
 ]);
+
+//Global Key to manage tabs dynamically
+final GlobalKey<BodyState> bodyKey = GlobalKey<BodyState>();
+
+//Global Key To manage poject dynamically
+final projectsSectionKey = GlobalKey<ProjectsSectionState>();

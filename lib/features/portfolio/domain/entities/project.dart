@@ -10,6 +10,7 @@ class Project {
   final String launchUrl;
   final String apkUrl;
   final String date;
+  final bool isFeatured;
 
   const Project({
     required this.id,
@@ -19,6 +20,7 @@ class Project {
     required this.technologies,
     required this.githubUrl,
     required this.launchUrl,
+    this.isFeatured = true,
     this.apkUrl = '',
     this.date = 'Recently',
   });

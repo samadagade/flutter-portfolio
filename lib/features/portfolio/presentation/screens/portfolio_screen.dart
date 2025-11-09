@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:portfolio/app_config.dart';
@@ -121,33 +120,41 @@ class _PortfolioState extends State<Portfolio>
                   // Handle selection
                   switch (result.section) {
                     case SearchSection.projects:
-                      // ignore: unused_local_variable
-                      final p = result.payload as Map<String, dynamic>;
-                      // Example: navigate to your project detail or open links
-                      // final url = (p['launch_url'] ?? p['github_url'])?.toString();
-                      // if (url != null) launchUrlString(url); // with url_launcher
+                      final p = result.payload as Project;
+                      bodyKey.currentState?.changeTab(1);
+                      Future.delayed(const Duration(milliseconds: 300), () {
+                        projectsSectionKey.currentState?.scrollToProject(p);
+                      });
                       break;
+
                     case SearchSection.experience:
+                      bodyKey.currentState?.changeTab(0);
                       // ignore: unused_local_variable
                       final e = result.payload as Map<String, dynamic>;
-                      // Navigate to your Experience page or show a bottom sheet
                       break;
                     case SearchSection.skills:
+                      bodyKey.currentState?.changeTab(2);
                       // ignore: unused_local_variable
                       final skill = result.payload as String;
-                      // Maybe filter your Projects page by this skill
                       break;
                   }
                 },
               ),
-            IconButton(
-              onPressed: widget.toggleTheme,
-              icon: Icon(
-                Theme.of(context).brightness == Brightness.dark
-                    ? Icons.light_mode
-                    : Icons.dark_mode,
-              ),
+            Container(
+              height: 18,
+              width: 1,
+              color: Colors.grey.shade400,
+              margin: const EdgeInsets.symmetric(horizontal: 8),
             ),
+            if (showSearchButtonInAppBar)
+              IconButton(
+                onPressed: widget.toggleTheme,
+                icon: Icon(
+                  Theme.of(context).brightness == Brightness.dark
+                      ? Icons.light_mode
+                      : Icons.dark_mode,
+                ),
+              ),
             Container(
               height: 18,
               width: 1,
@@ -169,7 +176,7 @@ class _PortfolioState extends State<Portfolio>
             ),
           ],
         ),
-        body: const Body(),
+        body: Body(key: bodyKey),
         floatingActionButton: FloatingActionButton.small(
             tooltip: 'Chat with AI Bot',
             backgroundColor: Colors.transparent,
@@ -221,7 +228,6 @@ class PortfolioSearchDelegate extends SearchDelegate<PortfolioSearchResult?> {
   final List<Project> projects;
   final List<Experience> experiences;
   final List<Skill> skills;
-
   // Which fields on your project map should be indexed:
   // static const _projectFields = [
   //   'title',
@@ -303,7 +309,7 @@ class PortfolioSearchDelegate extends SearchDelegate<PortfolioSearchResult?> {
       final haystack = [
         p.title,
         p.subtitle,
-        p.technologies.join(', '),
+        p.technologies.map((s) => s.name).join(', '),
         p.githubUrl,
         p.launchUrl,
         p.id,
@@ -323,7 +329,7 @@ class PortfolioSearchDelegate extends SearchDelegate<PortfolioSearchResult?> {
             title: p.title,
             subtitle: p.subtitle,
             trailing: p.technologies.isNotEmpty
-                ? p.technologies.take(3).join(' · ')
+                ? p.technologies.take(3).map((s) => s.name).join(' · ')
                 : null,
             payload: p,
             score: score,
