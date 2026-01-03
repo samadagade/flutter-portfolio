@@ -212,7 +212,7 @@ Widget buttonRowForFooter(BuildContext context) {
             icon: e.iconWidget,
             onPressed: e.overrideOnTap ?? () => _openOrSoon(context, e.url),
             mouseCursor: SystemMouseCursors.click,
-            //onLongPress: e.onLongPress
+            onLongPress: e.onLongPress
         );
       } else {
         // SizedBox spacer or Image/etc.

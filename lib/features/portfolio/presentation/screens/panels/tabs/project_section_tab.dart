@@ -74,12 +74,12 @@ class ProjectsSectionState extends State<_ProjectsSection> {
       }
     });
 
-    Future.delayed(Duration(seconds: 2), (){
-       if(mounted && highlightProjectId == p.id){
+    Future.delayed(Duration(seconds: 2), () {
+      if (mounted && highlightProjectId == p.id) {
         setState(() {
           highlightProjectId = null;
         });
-       }
+      }
     });
   }
 
@@ -116,7 +116,6 @@ class ProjectsSectionState extends State<_ProjectsSection> {
             (tech) => _selectedSkills
                 .any((s) => s.name.toLowerCase() == tech.name.toLowerCase()),
           );
-
       return matchesQuery && matchesSkills && p.isFeatured;
     }).toList();
   }
@@ -133,8 +132,20 @@ class ProjectsSectionState extends State<_ProjectsSection> {
     final controller = FlipCardController();
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Visibility(
+          visible: !_isSearching,
+          child: IconButton(
+              onPressed: () {
+                setState(() {
+                  _isSearching = !_isSearching;
+                  if (!_isSearching) _searchCtrl.clear();
+                });
+              },
+              icon: Icon(Icons.search, size: 20)),
+        ),
+
         // ======= Top bar: click-to-reveal search =======
         Visibility(
           visible: _isSearching,
@@ -181,7 +192,7 @@ class ProjectsSectionState extends State<_ProjectsSection> {
                     ),
                   ),
 
-                  const SizedBox(width: 4),
+                  // const SizedBox(width: 4),
 
                   // Toggle search open/close
                   // Tooltip(
@@ -197,21 +208,20 @@ class ProjectsSectionState extends State<_ProjectsSection> {
                   //   ),
                   // ),
 
-                  const SizedBox(width: 4),
+                  // const SizedBox(width: 4),
 
-                  Tooltip(
-                    message: "Filter by skills",
-                    child: IconButton.filledTonal(
-                      onPressed: _openSkillsDialog,
-                      icon: const Icon(Icons.tune),
-                    ),
-                  ),
+                  // Tooltip(
+                  //   message: "Filter by skills",
+                  //   child: IconButton.filledTonal(
+                  //     onPressed: _openSkillsDialog,
+                  //     icon: const Icon(Icons.tune),
+                  //   ),
+                  // ),
 
-                  const SizedBox(width: 4),
+                  // const SizedBox(width: 4),
 
-                  if ((_selectedSkills.isNotEmpty) ||
-                      (_isSearching && _searchCtrl.text.isNotEmpty))
-                    TextButton.icon(
+                  if ((_selectedSkills.isNotEmpty) || (_isSearching))
+                    IconButton(
                       onPressed: () {
                         setState(() {
                           _selectedSkills.clear();
@@ -219,8 +229,8 @@ class ProjectsSectionState extends State<_ProjectsSection> {
                           _isSearching = false;
                         });
                       },
-                      icon: const Icon(Icons.clear_all),
-                      label: const Text("Clear"),
+                      icon: const Icon(Icons.clear),
+                      // label: const Text("Clear"),
                     ),
                 ],
               ),
@@ -229,37 +239,40 @@ class ProjectsSectionState extends State<_ProjectsSection> {
         ),
 
         // ======= Results count =======
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-          child: Row(
-            children: [
-              Tooltip(
-                message: _isSearching ? "Close search" : "Search",
-                child: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      _isSearching = !_isSearching;
-                      if (!_isSearching) _searchCtrl.clear();
-                    });
-                  },
-                  icon: Icon(
-                    _isSearching ? Icons.close : Icons.search,
-                    size: 20,
-                  ),
+        showSearchInProjectSection
+            ? Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                child: Row(
+                  children: [
+                    // Tooltip(
+                    //   message: _isSearching ? "Close search" : "Search",
+                    //   child: IconButton(
+                    //     onPressed: () {
+                    //       setState(() {
+                    //         _isSearching = !_isSearching;
+                    //         if (!_isSearching) _searchCtrl.clear();
+                    //       });
+                    //     },
+                    //     icon: Icon(
+                    //       _isSearching ? Icons.close : Icons.search,
+                    //       size: 20,
+                    //     ),
+                    //   ),
+                    // ),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        "${_filtered.length} project${_filtered.length == 1 ? '' : 's'}"
+                        "${_selectedSkills.isEmpty ? '' : ' • ${_selectedSkills.length} skill filter(s)'}",
+                        style: theme.textTheme.labelMedium
+                            ?.copyWith(color: Colors.blueGrey),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              Align(
-                alignment: Alignment.centerRight,
-                child: Text(
-                  "${_filtered.length} project${_filtered.length == 1 ? '' : 's'}"
-                  "${_selectedSkills.isEmpty ? '' : ' • ${_selectedSkills.length} skill filter(s)'}",
-                  style: theme.textTheme.labelMedium
-                      ?.copyWith(color: Colors.blueGrey),
-                ),
-              ),
-            ],
-          ),
-        ),
+              )
+            : const SizedBox.shrink(),
 
         // ======= Project list =======
         Expanded(
@@ -318,7 +331,7 @@ class ProjectsSectionState extends State<_ProjectsSection> {
                                 alignment: Alignment.center,
                                 front: _buildFront(
                                     context: context, project: project),
-                                back: _buildBack(
+                                back:  _buildBack(
                                     context: context, project: project),
                               ),
                             ],

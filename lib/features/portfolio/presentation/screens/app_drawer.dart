@@ -107,13 +107,16 @@ class AppDrawer extends StatelessWidget {
                   _DrawerTile(
                     leadingIcon: FontAwesomeIcons.house,
                     title: "Home",
-                    onTap: () => Navigator.pop(context),
+                    onTap: () {
+                      bodyKey.currentState?.changeTab(0);
+                      Navigator.pop(context);
+                    }
                   ),
                   _DrawerTile(
                     leadingIcon: FontAwesomeIcons.code,
                     title: "Projects",
                     onTap: () {
-                      comingSoonSnackbar(context);
+                      bodyKey.currentState?.changeTab(1);
                       Navigator.pop(context);
                     },
                   ),
@@ -121,7 +124,7 @@ class AppDrawer extends StatelessWidget {
                     leadingIcon: FontAwesomeIcons.toolbox,
                     title: "Skills",
                     onTap: () {
-                      comingSoonSnackbar(context);
+                      bodyKey.currentState?.changeTab(2);
                       Navigator.pop(context);
                     },
                   ),
@@ -129,7 +132,7 @@ class AppDrawer extends StatelessWidget {
                     leadingIcon: FontAwesomeIcons.addressCard,
                     title: "Experience",
                     onTap: () {
-                      comingSoonSnackbar(context);
+                      bodyKey.currentState?.changeTab(0);
                       Navigator.pop(context);
                     },
                   ),

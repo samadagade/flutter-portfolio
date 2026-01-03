@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:portfolio/app_config.dart';
+import 'package:portfolio/core/util/lauch_url.dart';
 import 'package:portfolio/core/widgets/share_copy.dart';
 
 Widget buildExperienceSection() {
@@ -30,7 +32,7 @@ Widget buildExperienceSection() {
 
               // Card
               InkWell(
-                splashColor: Colors.transparent,
+                overlayColor: MaterialStateProperty.all(Colors.transparent),
                 onLongPress: () {
                   showShareCopyDialog(
                     context,
@@ -72,7 +74,6 @@ Widget buildExperienceSection() {
                         exp.role,
                         style: theme.textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
-                          color: scheme.primary,
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -88,9 +89,16 @@ Widget buildExperienceSection() {
                       const SizedBox(height: 8),
 
                       // Description
-                      Text(
-                        exp.description,
-                        style: theme.textTheme.bodyMedium,
+                      MarkdownBody(
+                        data: exp.description,
+                        styleSheet:
+                            MarkdownStyleSheet.fromTheme(theme).copyWith(
+                          p: theme.textTheme.bodyMedium,
+                        ),
+                        onTapLink: (text, href, title) async {
+                          if (href == null) return;
+                          await launchLink(href, context);
+                        },
                       ),
                     ],
                   ),

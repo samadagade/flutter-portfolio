@@ -23,3 +23,6 @@ String getPhoneUrl() {
   final String url = 'tel:$phoneNumber';
   return url;
 }
+//return current day is same day or not
+bool sameDay(DateTime a, DateTime b) =>
+    a.year == b.year && a.month == b.month && a.day == b.day;

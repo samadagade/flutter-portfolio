@@ -21,13 +21,15 @@ String androidAPKUrl =
 String webUrl = "https://samarth-dagade.netlify.app";
 String exampleUrl = "https://example.com";
 String whatsappContactUrl = "https://wa.me/9325728101";
+String chatbotBaseUrl = "http://127.0.0.1:8080"; //Update with your backend URL
 
 // Social configuration for the app
 bool showBlogsTab = false;
 bool showImagesInProjectTab = true;
 bool showFooter = kIsWeb;
 bool showSearchButtonInAppBar = true;
-bool showDrawer = false;
+bool showDrawer = !kIsWeb;
+bool showSearchInProjectSection = true;
 
 // contact details
 final phoneNumber = '+91 9325728101';
@@ -123,10 +125,17 @@ final List<Experience> experiences = List.unmodifiable(const [
     role: "Junior Software Developer",
     company: "Börm Bruckmeier Infotech India Pvt. Ltd.",
     duration: "Oct 2024 - Present",
-    description:
-        '• Improved and redesigned UI/UX components across multiple Flutter-based apps (AP, Rheum-a, DGK Web, EHA Web), including responsive layouts, navigation flow, and feedback integration.\n'
-        '• Led implementation of new features such as splash screens, user account systems, TOC with gradient support, and analytics tracking, along with structured testing and deployment via TestFlight.\n'
-        '• Created detailed flowcharts for user account and login processes, resolved complex bugs, and researched browser history management in Flutter Web to support scalable web solutions.',
+    description: '''
+• Contributed to **5+ cross-platform Android, iOS, and Web applications**, delivering high-performance, scalable, and multi-device Adaptive UI experiences.
+
+• **[Arzneimittel Pocket Plus](https://play.google.com/store/apps/details?id=com.boerm.bruckmeier.arzneimittel_pocket&pcampaignid=web_share)** (100k+ downloads, 200k+ signups): Improved load time by **90%** by caching data at login time; improved JSON efficiency by **30%** by simplifying gradients; resolved vertical scroll & horizontal swipe issues. Migrated the app to the latest **Flutter** and **Android 35**, fixed the **16 KB page size** error, and ensured full offline functionality (**100% reliability**). Built the MediMir–AP merged login flowchart and implemented it in the app. Updated app UI according to new design drafts.
+
+• **[IDSA](https://play.google.com/store/apps/details?id=org.idsociety.guidelines&pcampaignid=web_share)** (50k+ downloads): Upgraded to the latest **Flutter** and **Android 35**, resolved the **16 KB page size** issue, and enhanced UI consistency across multiple devices.
+
+• **[Rheuma CDS](https://play.google.com/store/apps/details?id=com.bbi.rheumatoide_arthritis_pocketcards&pcampaignid=web_share)**: Updated UI components and integrated the **Enhanced Feedback System** to improve user insights and overall UX.
+
+• **[EAU Web](https://eau-web.web.app/)**, **[EHA Web](https://eha-web-c92c4.web.app/)**, and **[DGK Web](https://dgk-web.web.app/)**: Implemented secure login modules with enable/disable capabilities, resolved internet snackbar and Home Screen click issues (**100% fix**), integrated the **Enhanced Feedback System**, and redesigned responsive Home UI for smoother interactions and improved usability.
+''',
   ),
 ]);
 
@@ -143,7 +152,7 @@ final List<Skill> skills = List.unmodifiable(const [
   Skill(name: "Regex"),
   Skill(name: "GitHub"),
   Skill(name: "DSA"),
-  Skill(name: "Unit"),
+  Skill(name: "JUnit"),
   Skill(name: "Spring Boot"),
 ]);
 

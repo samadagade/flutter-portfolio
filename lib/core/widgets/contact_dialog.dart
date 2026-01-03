@@ -69,20 +69,20 @@ void showContactDialog(BuildContext context) {
                     tooltip: "Phone",
                     iconSize: 32,
                     onPressed: () => launchLink(getPhoneUrl(), context),
-                    // onLongPress: () {
-                    //   copyToClipboard(
-                    //     context: context,
-                    //     clipbarodData: phoneNumber,
-                    //   );
-                    //   Navigator.pop(context);
-                    //   showCustomSnackBar(
-                    //       context: context,
-                    //       message: 'Mobile Number copied to clipboard!',
-                    //       backgroundColor: Colors.green,
-                    //       actionLabel: 'Dismiss',
-                    //       onAction: () => ScaffoldMessenger.of(context)
-                    //           .hideCurrentSnackBar());
-                    // },
+                    onLongPress: () {
+                      copyToClipboard(
+                        context: context,
+                        clipbarodData: phoneNumber,
+                      );
+                      Navigator.pop(context);
+                      showCustomSnackBar(
+                          context: context,
+                          message: 'Mobile Number copied to clipboard!',
+                          backgroundColor: Colors.green,
+                          actionLabel: 'Dismiss',
+                          onAction: () => ScaffoldMessenger.of(context)
+                              .hideCurrentSnackBar());
+                    },
                     icon: FaIcon(FontAwesomeIcons.phone, color: Colors.green),
                   ),
                 ],
@@ -94,7 +94,6 @@ void showContactDialog(BuildContext context) {
     },
   );
 }
-
 
 void showLocationDialog(BuildContext context) {
   showDialog(

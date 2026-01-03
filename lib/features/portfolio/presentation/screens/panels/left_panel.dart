@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:portfolio/app_config.dart';
 import 'package:portfolio/core/util/lauch_url.dart';
-import 'package:portfolio/core/util/utility.dart';
 import 'package:portfolio/core/widgets/contact_button.dart';
 import 'package:portfolio/core/widgets/share_copy.dart';
 import 'package:portfolio/core/widgets/social_icons.dart';
+import 'package:portfolio/features/chatbot/presentation/chat_bot.dart';
+
 
 Widget leftPanel(BuildContext context) {
   double screenWidth = MediaQuery.of(context).size.width;
@@ -64,9 +65,7 @@ Widget leftPanel(BuildContext context) {
                         TyperAnimatedText(
                           "Software Developer",
                           textStyle: TextStyle(
-                            color: getColor(context,
-                                lightColor: Colors.black,
-                                darkColor: Colors.amber),
+                            color: Colors.amber,
                             fontSize: headingFontSize,
                             fontWeight: FontWeight.bold,
                           ),
@@ -77,18 +76,14 @@ Widget leftPanel(BuildContext context) {
                           textStyle: TextStyle(
                             fontSize: headingFontSize,
                             fontWeight: FontWeight.bold,
-                            color: getColor(context,
-                                lightColor: Colors.black,
-                                darkColor: Colors.lightBlue),
+                            color: Colors.lightBlue,
                           ),
                           textAlign: TextAlign.center,
                         ),
                         TyperAnimatedText(
                           "Java Developer",
                           textStyle: TextStyle(
-                            color: getColor(context,
-                                lightColor: Colors.black,
-                                darkColor: Colors.orange),
+                            color: Colors.orange,
                             fontSize: headingFontSize,
                             fontWeight: FontWeight.bold,
                           ),
@@ -97,23 +92,35 @@ Widget leftPanel(BuildContext context) {
                       ],
                     ),
                     const SizedBox(height: 30),
-                    ContactButton(
-                        buttonText: "Resume",
-                        icon: const Icon(
-                          FontAwesomeIcons.filePdf,
-                          size: 16,
-                          color: Colors.black,
-                        ),
-                        onPressed: () async {
-                          launchLink(
-                              // ignore: use_build_context_synchronously
-                              resumeUrl,
-                              context);
-                        },
-                        onLongPress: () => showShareCopyDialogByType(
-                              context: context,
-                              option: PopupOption.resume,
-                            )),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                       ChatBotButton(onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const ChatBot(),
+                            ),
+                          );
+                        }),
+                        ContactButton(
+                            buttonText: "Resume",
+                            icon: const Icon(
+                              FontAwesomeIcons.filePdf,
+                              size: 16,
+                              color: Colors.black,
+                            ),
+                            onPressed: () async {
+                              launchLink(
+                                  // ignore: use_build_context_synchronously
+                                  resumeUrl,
+                                  context);
+                            },
+                            onLongPress: () => showShareCopyDialogByType(
+                                  context: context,
+                                  option: PopupOption.resume,
+                                )),
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -124,4 +131,54 @@ Widget leftPanel(BuildContext context) {
       ],
     ),
   );
+}
+
+
+
+
+/// Chatbot Call-to-Action Button
+class ChatBotButton extends StatelessWidget {
+  final VoidCallback onTap;
+  const ChatBotButton({super.key, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(999),
+      onTap: onTap,
+      child: Ink(
+        padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(999),
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xFF6D5DF6), Color(0xFF22D3EE)],
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.18),
+              blurRadius: 18,
+              offset: const Offset(0, 10),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: const [
+            Icon(Icons.smart_toy_outlined, color: Colors.white),
+            Text(
+              "AI Help",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 14,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 0.2,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }

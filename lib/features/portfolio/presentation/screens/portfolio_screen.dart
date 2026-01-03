@@ -47,6 +47,7 @@ class _PortfolioState extends State<Portfolio>
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+    final isCompact = MediaQuery.of(context).size.width < 480;
 
     return Scaffold(
         key: _scaffoldKey,
@@ -146,34 +147,46 @@ class _PortfolioState extends State<Portfolio>
               color: Colors.grey.shade400,
               margin: const EdgeInsets.symmetric(horizontal: 8),
             ),
-            if (showSearchButtonInAppBar)
-              IconButton(
-                onPressed: widget.toggleTheme,
-                icon: Icon(
-                  Theme.of(context).brightness == Brightness.dark
-                      ? Icons.light_mode
-                      : Icons.dark_mode,
-                ),
+            IconButton(
+              onPressed: widget.toggleTheme,
+              icon: Icon(
+                Theme.of(context).brightness == Brightness.dark
+                    ? Icons.light_mode
+                    : Icons.dark_mode,
               ),
+            ),
             Container(
               height: 18,
               width: 1,
               color: Colors.grey.shade400,
               margin: const EdgeInsets.symmetric(horizontal: 8),
             ),
-            ContactButton(
-              buttonText: "Contact Me",
-              icon: const FaIcon(
-                FontAwesomeIcons.solidComments,
-                size: 20,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                showContactDialog(context);
-              },
-              onLongPress: () => showShareCopyDialogByType(
-                  context: context, option: PopupOption.contactme),
-            ),
+            isCompact
+                ? IconButton(
+                    tooltip: 'Contact Me',
+                    onPressed: () {
+                      showContactDialog(context);
+                    },
+                    onLongPress: () => showShareCopyDialogByType(
+                        context: context, option: PopupOption.contactme),
+                    icon: FaIcon(
+                      FontAwesomeIcons.solidComments,
+                      size: 20,
+                    ),
+                  )
+                : ContactButton(
+                    buttonText: "Contact Me",
+                    icon: const FaIcon(
+                      FontAwesomeIcons.solidComments,
+                      size: 20,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      showContactDialog(context);
+                    },
+                    onLongPress: () => showShareCopyDialogByType(
+                        context: context, option: PopupOption.contactme),
+                  ),
           ],
         ),
         body: Body(key: bodyKey),
@@ -181,7 +194,7 @@ class _PortfolioState extends State<Portfolio>
             tooltip: 'Chat with AI Bot',
             backgroundColor: Colors.transparent,
             onPressed: () => Navigator.push(
-                context, MaterialPageRoute(builder: (context) => SimpleChat())),
+                context, MaterialPageRoute(builder: (context) => ChatBot())),
             child: FaIcon(
               FontAwesomeIcons.robot,
               color: Theme.of(context).brightness == Brightness.dark
@@ -315,11 +328,7 @@ class PortfolioSearchDelegate extends SearchDelegate<PortfolioSearchResult?> {
         p.id,
         p.image,
         // ignore: unnecessary_null_comparison
-      ]
-          .where((v) => v != null)
-          .map((v) => v.toString())
-          .join(' \n ')
-          .toLowerCase();
+      ].map((v) => v.toString()).join(' \n ').toLowerCase();
 
       final score = _score(haystack, text);
       if (score > 0) {
@@ -346,11 +355,7 @@ class PortfolioSearchDelegate extends SearchDelegate<PortfolioSearchResult?> {
         e.duration,
         e.description,
         // ignore: unnecessary_null_comparison
-      ]
-          .where((v) => v != null)
-          .map((v) => v.toString())
-          .join(' \n ')
-          .toLowerCase();
+      ].map((v) => v.toString()).join(' \n ').toLowerCase();
 
       final score = _score(haystack, text);
       if (score > 0) {

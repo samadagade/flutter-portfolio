@@ -10,7 +10,7 @@ ThemeData lightTheme() {
       ),
       backgroundColor: Colors.transparent,
       elevation: 5.0,
-      shadowColor: Colors.black12,
+      shadowColor: const Color.fromARGB(31, 47, 26, 26),
     ),
   );
 }
