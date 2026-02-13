@@ -10,7 +10,7 @@ class PortfolioBotApi {
     this.basicAuth,
   });
 
-  Future<String> ask({
+  Future<ChatResponse> ask({
     required String sessionId,
     required String prompt,
   }) async {
@@ -33,9 +33,8 @@ class PortfolioBotApi {
     final res = await http.post(uri, headers: headers, body: body);
    
     if (res.statusCode >= 200 && res.statusCode < 300) {
-      // final data = jsonDecode(res.body) as Map<String, dynamic>;
-      // return ChatResponse.fromJson(data);
-      return res.body;
+      final data = jsonDecode(res.body) as Map<String, dynamic>;
+      return ChatResponse.fromJson(data);
     }
 
     // show backend error in exception
@@ -51,7 +50,7 @@ class ChatResponse {
 
   factory ChatResponse.fromJson(Map<String, dynamic> json) {
     return ChatResponse(
-      answer: (json['answer'] ?? '').toString(),
+      answer: (json['response'] ?? '').toString(),
       fallback: (json['fallback'] ?? false) == true,
     );
   }

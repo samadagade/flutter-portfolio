@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:portfolio/app_config.dart';
+import 'package:portfolio/core/util/utility.dart';
 import 'package:portfolio/features/portfolio/domain/entities/experience.dart';
 import 'package:portfolio/features/portfolio/domain/entities/project.dart';
 import 'package:portfolio/features/portfolio/domain/entities/skill.dart';
@@ -192,14 +193,14 @@ class _PortfolioState extends State<Portfolio>
         body: Body(key: bodyKey),
         floatingActionButton: FloatingActionButton.small(
             tooltip: 'Chat with AI Bot',
-            backgroundColor: Colors.transparent,
+            backgroundColor: isDarkMode(context)
+                ? Colors.transparent
+                : Colors.white38,
             onPressed: () => Navigator.push(
                 context, MaterialPageRoute(builder: (context) => ChatBot())),
             child: FaIcon(
               FontAwesomeIcons.robot,
-              color: Theme.of(context).brightness == Brightness.dark
-                  ? Colors.white
-                  : Colors.black87,
+              color: isDarkMode(context) ? Colors.white : Colors.black87,
             )));
   }
 }

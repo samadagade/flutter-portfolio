@@ -1,7 +1,9 @@
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:http/http.dart' as http;
 import 'package:portfolio/app_config.dart';
 import 'package:portfolio/core/util/coming_soon_snackbar.dart';
 import 'package:portfolio/core/util/lauch_url.dart';
@@ -18,9 +20,13 @@ class AppInfoPage extends StatefulWidget {
 }
 
 class _AppInfoPageState extends State<AppInfoPage> {
+  List<GitHubAsset> assets = [];
+  int totalDownloads = 0;
+
   @override
   void initState() {
     super.initState();
+    _loadAssets();
   }
 
   @override
@@ -209,6 +215,8 @@ class _AppInfoPageState extends State<AppInfoPage> {
                     children: const [
                       _TechChip('Flutter'),
                       _TechChip('Dart'),
+                      _TechChip('Spring Boot'),
+                      _TechChip('Spring AI'),
                     ],
                   ),
                 ],
@@ -221,8 +229,13 @@ class _AppInfoPageState extends State<AppInfoPage> {
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
             sliver: SliverToBoxAdapter(
               child: Row(
-                children: const [
-                  Expanded(child: _StatCard(value: '23', label: 'Downloads')),
+                children: [
+                  Expanded(
+                      child: _StatCard(
+                          value: totalDownloads == 0
+                              ? '—'
+                              : totalDownloads.toString(),
+                          label: 'Downloads')),
                   SizedBox(width: 12),
                   Expanded(child: _StatCard(value: '4.8★', label: 'Rating')),
                   SizedBox(width: 12),
@@ -272,7 +285,7 @@ class _AppInfoPageState extends State<AppInfoPage> {
             ? comingSoonSnackbar(context)
             : launchLink(androidAPKUrl, context),
       ),
-      const _LinkButton(
+      _LinkButton(
         icon: FaIcon(FontAwesomeIcons.apple),
         label: 'iOS',
         // iOS is coming soon
@@ -306,6 +319,11 @@ class _AppInfoPageState extends State<AppInfoPage> {
         label: 'GFG',
         onTap: () => launchLink(gfgProfileUrl, context),
       ),
+      _LinkButton(
+        icon: Icon(Icons.code),
+        label: 'Leetcode',
+        onTap: () => launchLink(leetcodeProfileUrl, context),
+      ),
     ];
 
     return GridView.count(
@@ -317,6 +335,75 @@ class _AppInfoPageState extends State<AppInfoPage> {
       childAspectRatio: 26 / 7,
       children: tiles,
     );
+  }
+
+  /// Replace with your own token if needed:
+  String githubToken = '';
+
+  /// The API URL
+  String apiUrl =
+      'https://api.github.com/repos/samadagade/flutter-portfolio/releases/latest';
+
+  /// Fetches all the release asset info
+  Future<List<GitHubAsset>> fetchGitHubAssets() async {
+    final response = await http.get(
+      Uri.parse(apiUrl),
+      headers: {
+        'Accept': 'application/vnd.github+json',
+        if (githubToken.isNotEmpty) 'Authorization': 'token $githubToken',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final r = jsonDecode(response.body) as Map<String, dynamic>;
+      List<dynamic> assetsJson = r['assets'];
+      return assetsJson.map((json) => GitHubAsset.fromJson(json)).toList();
+    } else {
+      throw Exception(
+          'Failed to load assets: ${response.statusCode} ${response.reasonPhrase}');
+    }
+  }
+
+  /// Starts the periodic fetch every 4 hours
+  Stream<List<GitHubAsset>> assetsStream() async* {
+    while (true) {
+      try {
+        final data = await fetchGitHubAssets();
+        yield data;
+      } catch (e) {
+        // You can handle/log errors here
+        debugPrint(e.toString());
+      }
+      await Future.delayed(const Duration(hours: 4));
+    }
+  }
+
+  void startListening() {
+    assetsStream().listen(
+      (assets) {
+        debugPrint("Got assets: ${assets.length}");
+        // Do whatever with the assets
+      },
+      onError: (err) {
+        print("Error: $err");
+      },
+    );
+  }
+
+  Future<void> _loadAssets() async {
+    try {
+      final fetchedAssets = await fetchGitHubAssets();
+
+      final downloads =
+          fetchedAssets.fold(0, (sum, a) => sum + a.downloadCount);
+
+      setState(() {
+        assets = fetchedAssets;
+        totalDownloads = downloads;
+      });
+    } catch (e) {
+      debugPrint('Failed to load assets: $e');
+    }
   }
 }
 
@@ -427,7 +514,7 @@ class _StatCard extends StatelessWidget {
 }
 
 class _LinkButton extends StatelessWidget {
-  const _LinkButton({
+  _LinkButton({
     required this.icon,
     required this.label,
     this.onTap,
@@ -472,6 +559,26 @@ class _LinkButton extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class GitHubAsset {
+  final int id;
+  final String name;
+  final int downloadCount;
+
+  GitHubAsset({
+    required this.id,
+    required this.name,
+    required this.downloadCount,
+  });
+
+  factory GitHubAsset.fromJson(Map<String, dynamic> json) {
+    return GitHubAsset(
+      id: json['id'],
+      name: json['name'],
+      downloadCount: json['download_count'],
     );
   }
 }

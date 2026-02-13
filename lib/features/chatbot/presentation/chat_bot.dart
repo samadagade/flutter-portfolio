@@ -562,13 +562,13 @@ Future<void> handleUserMessage(
         .ask(sessionId: sessionId, prompt: originalMessage)
         .timeout(const Duration(seconds: 12));
 
-    if (resp.trim().isEmpty) {
+    if (resp.answer.trim().isEmpty) {
       typingController.add(false);
       await localBot();
       return;
     }
 
-    reply(resp);
+    reply(resp.answer);
   } catch (_) {
     typingController.add(false);
     await localBot();

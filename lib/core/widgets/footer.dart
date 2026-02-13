@@ -13,7 +13,7 @@ Widget PortfolioFooter(BuildContext context) {
       gradient: LinearGradient(
         colors: [
           getColor(context,
-              lightColor: Colors.white,
+              lightColor: Colors.white.withOpacity(0.3),
               darkColor: Colors.black.withOpacity(0.3)),
           getColor(context,
               lightColor: Colors.grey.shade100,

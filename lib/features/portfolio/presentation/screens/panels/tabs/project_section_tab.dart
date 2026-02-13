@@ -432,6 +432,7 @@ class ProjectsSectionState extends State<_ProjectsSection> {
 
   Widget _buildFront(
       {required BuildContext context, required Project project}) {
+  final cs = Theme.of(context).colorScheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -493,13 +494,10 @@ class ProjectsSectionState extends State<_ProjectsSection> {
                       showCheckmark: false,
                       side: BorderSide(
                         color: _selectedSkills.contains(tech)
-                            ? Colors.indigo
-                            : Colors.indigo.shade100,
+                            ? Colors.indigo.shade50
+                            : cs.primaryContainer.withOpacity(0.6),
                       ),
-                      backgroundColor:
-                          Theme.of(context).brightness == Brightness.dark
-                              ? Colors.indigo.shade100
-                              : Colors.indigo.shade50,
+                      backgroundColor: isDarkMode(context) ? cs.primaryContainer.withOpacity(0.25) : Colors.indigo.shade50,
                       selectedColor: Colors.indigo.withOpacity(0.18),
                       labelStyle: const TextStyle(color: Colors.indigo),
                     ))

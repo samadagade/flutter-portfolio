@@ -18,10 +18,11 @@ String twitterProfileUrl = "https://twitter.com/DagadeSamarth";
 String gfgProfileUrl = "https://www.geeksforgeeks.org/user/samarthdagade/";
 String androidAPKUrl =
     "https://github.com/samadagade/flutter-portfolio/releases/download/v${AppInfo.version}/flutter_portfolio_v${AppInfo.version}.apk";
+String leetcodeProfileUrl = "https://leetcode.com/samarth_dagade/";
 String webUrl = "https://samarth-dagade.netlify.app";
 String exampleUrl = "https://example.com";
 String whatsappContactUrl = "https://wa.me/9325728101";
-String chatbotBaseUrl = "http://127.0.0.1:8080"; //Update with your backend URL
+String chatbotBaseUrl = "https://portfolio-backend-82jm.onrender.com";
 
 // Social configuration for the app
 bool showBlogsTab = false;
